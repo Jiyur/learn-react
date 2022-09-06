@@ -1,23 +1,15 @@
-import logo from './logo.svg';
-import './App.css';
+import { Link, Route, Routes } from 'react-router-dom';
+import AlbumFeater from './features/Album';
+import TodoFeature from './features/Todo';
 
 function App() {
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Quang Khanh
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      Home page
+      <Routes>
+      <Route path="/todos" element={<TodoFeature/>}/>
+      <Route path="/albums" element={<AlbumFeater/>}/>
+      </Routes>
     </div>
   );
 }
