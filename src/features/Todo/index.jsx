@@ -1,6 +1,7 @@
 import React, {useState} from 'react';
+import { useLocation, useNavigate} from 'react-router-dom';
 import TodoList from './components/TodoList';
-
+import queryString from 'query-string'
 TodoFeature.propTypes = {
     
 };
@@ -23,8 +24,13 @@ function TodoFeature(props) {
             status:'new',
         },
     ]
+    const location=useLocation()
+    const history=useNavigate()
     const [todoList, setTodoList]=useState(initTodoList);
-    const [filteredStatus, setFilteredStatus]=useState('all');
+    const [filteredStatus, setFilteredStatus]=useState(()=>{
+        const params=queryString.parse(location.search);
+        return params.status
+    });
     
     const handleTodoClick=(todo,index)=>{
         const newTodoList=[...todoList]
@@ -42,13 +48,26 @@ function TodoFeature(props) {
     }
     const handleShowAllClick=() => {
         setFilteredStatus('all');
+        const queryParams={status: 'all'};
+        history({
+            search: `?status=${queryParams.status}`
+        })
     }
     const handleShowCompletedClick=() => {
         setFilteredStatus('completed');
-
+        const queryParams={status: 'completed'};
+        history({
+            search: `?status=${queryParams.status}`
+        })
+       
     }
     const handleShowNewClick=() => {
         setFilteredStatus('new');
+        const queryParams={status: 'new'};
+        history({
+            search: `?status=${queryParams.status}`
+        })
+      
 
     }
     const renderedTodoList=todoList.filter(todo=>filteredStatus==='all'||filteredStatus===todo.status)
@@ -56,7 +75,7 @@ function TodoFeature(props) {
     return (
         <div>
             <h3>Todo List</h3>
-            <TodoList todoList={renderedTodoList} onTodoClick={handleTodoClick}></TodoList>
+            <TodoList todoList={renderedTodoList } onTodoClick={handleTodoClick}></TodoList>
             <div>
                 <button onClick={handleShowAllClick}>Show All</button>
                 <button onClick={handleShowCompletedClick}>Show Completed</button>
