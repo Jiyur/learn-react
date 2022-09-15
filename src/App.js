@@ -1,19 +1,33 @@
-import { Link, Route, Routes } from 'react-router-dom';
+import { useEffect } from 'react';
+import {  Route, Routes } from 'react-router-dom';
+import productApi from './api/productAPI';
 import NotFound from './components/NotFound';
 import AlbumFeater from './features/Album';
-import TodoFeature from './features/Todo';
+import CounterFeature from './features/Counter';
+import TodoFeature from './features/Todo/pages/ListPage';
+import Header from './components/Header'
 
 function App() {
+  useEffect(() => {
+    const fetchProducts = async () => {
+      const params={
+        _limit:10,
+      };
+      const productList = await productApi.getAll(params);
+      console.log(productList)
+    };
+    fetchProducts();
+  },[]);
+
   return (
     <div className="App">
-      Home page
+      <Header/>
       <Routes>
-      <Route path='/' exact/>
-      <Route path="/todos" element={<TodoFeature/>} exact/>
-      <Route path="/albums" element={<AlbumFeater/>} exact/>
-      <Route element={<NotFound/>}/>
+        <Route path="/" element={<CounterFeature/>} exact/>
+        <Route path="/todos" element={<TodoFeature />} exact />
+        <Route path="/albums" element={<AlbumFeater />} exact />
+        <Route element={<NotFound />} />
       </Routes>
-
     </div>
   );
 }
